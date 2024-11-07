@@ -9,7 +9,7 @@ export default function Home() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <div className='title'>Rock Paper Scissors Lizard Spock</div>
+      <div className='title'>MPC Lizard Spock</div>
       <h2>Rules</h2>
       <div>
         This game is similar to rock paper scissors, but with two extra options:
