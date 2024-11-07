@@ -1,0 +1,46 @@
+{
+  "name": "mpc-lizard-spock",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@types/events": "^3.0.3",
+    "@types/react-copy-to-clipboard": "^5.0.7",
+    "@yudiel/react-qr-scanner": "^2.0.0-beta.3",
+    "base64url": "^3.0.1",
+    "bs58": "^5.0.0",
+    "buffer": "^6.0.3",
+    "emp-wasm-backend": "^0.1.0",
+    "events": "^3.3.0",
+    "keccak256": "^1.0.6",
+    "mpc-framework": "^0.1.1",
+    "qrcode.react": "^3.1.0",
+    "react": "^18.2.0",
+    "react-copy-to-clipboard": "^5.1.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^5.2.0",
+    "rtc-pair-socket": "^0.1.5",
+    "summon-ts": "^0.2.1",
+    "typed-emitter": "^2.1.0",
+    "zod": "^3.23.5"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "eslint": "^8.57.0",
+    "eslint-config-xo": "^0.44.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0"
+  }
+}
