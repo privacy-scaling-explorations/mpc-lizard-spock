@@ -1,27 +1,22 @@
 import './Home.css';
 import Ctx from './Ctx';
 import isKey from './isKey';
+import gameDiagramSrc from './assets/GameDiagram.svg';
 
 export default function Home() {
   const ctx = Ctx.use();
   const hasUrlKey = isKey(window.location.hash.slice(1));
 
   return (
-    <div>
-      <div className='title'>2PC IS FOR</div>
-      <div className='title lovers'>LOVERS</div>
-      <div className='title heart'>❤️</div>
-      <p>
-        Did you ever fall in love with your best friend? Hope they feel the
-        same, but afraid to lose the friendship?
-      </p>
-      <p>
-        This app uses <a href='https://eprint.iacr.org/2017/030.pdf'>
-          advanced cryptography
-        </a> to solve the problem! 🤓
-      </p>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div className='title'>Rock Paper Scissors Lizard Spock</div>
+      <h2>Rules</h2>
+      <div>
+        This game is similar to rock paper scissors, but with two extra options:
+      </div>
+      <img style={{ width: 'calc(0.7 * var(--aw))', alignSelf: 'center' }} src={gameDiagramSrc} />
       <h2>How it Works</h2>
-      <ol>
+      <ol style={{ margin: 0 }}>
         <li>
           <a href='#' onClick={() => {
             ctx.page.set('Share');
@@ -32,35 +27,25 @@ export default function Home() {
         </li>
         <li>Host a session.</li>
         <li>Get your friend to join.</li>
-        <li>Choose love or friendship.</li>
-        <li>
-          If you both choose love, you'll both find out. Otherwise, you'll both
-          see friendship.
-        </li>
+        <li>Choose between rock/paper/etc.</li>
+        <li>Result will be calculated.</li>
       </ol>
-      <h2>They <i>Really</i> Won't Know?</h2>
-      <p>
-        Yes. Really.
-      </p>
-      <p>
-        This is an&nbsp;
-        <a href='https://github.com/voltrevo/2pc-is-for-lovers'>open source</a>
-        &nbsp;app.
-      </p>
-      <p>
-        If you choose love but the result is
-        friendship, <i>only you</i> will know. Even if your friend knows
-        advanced cryptography.
-      </p>
-      <p>
-        This is the <a href='https://www.youtube.com/watch?v=PzcDqegGoKI'>
-          magic
-        </a> of 2PC.
-      </p>
-      <p>
-        All communication is end-to-end encrypted. The server/internet will not
-        know either.
-      </p>
+      <h2>Cryptography</h2>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.7em' }}>
+        <div>
+          This app uses&nbsp;
+          <a href='https://github.com/voltrevo/mpc-framework'>
+            secure MPC
+          </a> to calculate the result while keeping your input secret.
+        </div>
+        <div>
+          That probably sounds a little strange, and that's because it is.
+        </div>
+        <div>
+          The purpose of this app is to open your mind to the power of this
+          counter-intuitive technology.
+        </div>
+      </div>
       <div className='main buttons'>
         <button disabled={hasUrlKey} onClick={() => ctx.page.set('Host')}>
           Host
