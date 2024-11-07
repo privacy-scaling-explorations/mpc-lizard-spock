@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './Choose.css';
 import Ctx, { GameOption } from './Ctx';
+import capitalize from './capitalize';
 
 export default function Choose() {
   const ctx = Ctx.use();
@@ -50,8 +51,4 @@ function Choice({ selection, setSelection, type }: {
       onClick={() => setSelection(selection === type ? undefined : type)}
     ><div>{capitalize(type)}</div></div>
   );
-}
-
-function capitalize(s: string) {
-  return s[0].toUpperCase() + s.slice(1);
 }

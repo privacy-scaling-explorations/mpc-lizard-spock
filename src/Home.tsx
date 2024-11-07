@@ -1,11 +1,9 @@
 import './Home.css';
 import Ctx from './Ctx';
-import isKey from './isKey';
 import gameDiagramSrc from './assets/GameDiagram.svg';
 
 export default function Home() {
   const ctx = Ctx.use();
-  const hasUrlKey = isKey(window.location.hash.slice(1));
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -39,7 +37,7 @@ export default function Home() {
           </a> to calculate the result while keeping your input secret.
         </div>
         <div>
-          That probably sounds a little strange, and that's because it is.
+          Hopefully that sounds a little strange. That's because it is.
         </div>
         <div>
           The purpose of this app is to open your mind to the power of this
@@ -47,18 +45,10 @@ export default function Home() {
         </div>
       </div>
       <div className='main buttons'>
-        <button disabled={hasUrlKey} onClick={() => ctx.page.set('Host')}>
+        <button onClick={() => ctx.page.set('Host')}>
           Host
         </button>
-        <button onClick={() => {
-          const urlKey = window.location.hash.slice(1);
-
-          if (isKey(urlKey)) {
-            ctx.page.set('AutoJoin');
-          } else {
-            ctx.page.set('Join');
-          }
-        }}>
+        <button onClick={() => ctx.page.set('Join')}>
           Join
         </button>
       </div>

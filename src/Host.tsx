@@ -7,7 +7,7 @@ export default function Host() {
   const ctx = Ctx.use();
   const key = ctx.key.use();
 
-  const codeAndLink = `https://bit.ly/2pcifl#${key.base58()}`;
+  const code = key.base58();
 
   useEffect(() => {
     ctx.host();
@@ -23,11 +23,11 @@ export default function Host() {
         <QRCodeCanvas
           style={{ width: '100%', height: 'auto' }}
           bgColor='transparent'
-          value={codeAndLink}
+          value={code}
         />
       </center>
       <p>
-        Or <CopyToClipboard text={codeAndLink}>
+        Or <CopyToClipboard text={code}>
           <button style={{ padding: '0.5rem' }}>copy</button>
         </CopyToClipboard> it and send.
       </p>

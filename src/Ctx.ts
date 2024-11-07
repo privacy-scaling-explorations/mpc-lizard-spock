@@ -13,7 +13,6 @@ type PageKind =
   | 'Share'
   | 'Host'
   | 'Join'
-  | 'AutoJoin'
   | 'Connecting'
   | 'Choose'
   | 'Waiting'
@@ -31,6 +30,7 @@ export default class Ctx extends Emitter<{ ready(choice: GameOption): void }> {
   friendReady = false;
   result = new UsableField<'win' | 'lose' | 'draw' | undefined>(undefined);
   errorMsg = new UsableField<string>('');
+  choice = new UsableField<GameOption | undefined>(undefined);
 
   constructor() {
     super();
@@ -152,6 +152,7 @@ export default class Ctx extends Emitter<{ ready(choice: GameOption): void }> {
 
   async send(choice: GameOption) {
     this.emit('ready', choice);
+    this.choice.set(choice);
 
     if (!this.friendReady) {
       this.page.set('Waiting');
