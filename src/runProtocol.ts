@@ -5,12 +5,14 @@ import * as summon from 'summon-ts';
 import { RtcPairSocket } from 'rtc-pair-socket';
 import assert from './assert';
 import AsyncQueue from './AsyncQueue';
+import { GameOption } from './Ctx';
+import getCircuitFiles from './getCircuitFiles';
 
 export default async function runProtocol(
   mode: 'Host' | 'Join',
   socket: RtcPairSocket,
-  choice: '🙂' | '😍',
-) {
+  choice: GameOption,
+): Promise<'win' | 'lose' | 'draw'> {
   const msgQueue = new AsyncQueue<unknown>();
 
   socket.on('message', msg => {
@@ -19,23 +21,18 @@ export default async function runProtocol(
 
   await summon.init();
 
-  const circuit = summon.compileBoolean('/src/main.ts', 1, {
-    '/src/main.ts': `
-      export default function main(a: number, b: number) {
-        return a & b;
-      }
-    `,
-  });
+  const circuitFiles = await getCircuitFiles();
+  const circuit = summon.compileBoolean('circuit/main.ts', 3, circuitFiles);
 
   const mpcSettings = [
     {
       name: 'alice',
-      inputs: ['a'],
+      inputs: ['player1'],
       outputs: ['main'],
     },
     {
       name: 'bob',
-      inputs: ['b'],
+      inputs: ['player2'],
       outputs: ['main'],
     },
   ];
@@ -49,11 +46,19 @@ export default async function runProtocol(
   const party = mode === 'Host' ? 'alice' : 'bob';
   const otherParty = mode === 'Host' ? 'bob' : 'alice';
 
-  const input = choice === '😍' ? 1 : 0;
+  const optionMap: Record<GameOption, number> = {
+    rock: 1,
+    paper: 2,
+    scissors: 3,
+    lizard: 4,
+    spock: 5,
+  };
+
+  const input = optionMap[choice];
 
   const session = protocol.join(
     party,
-    party === 'alice' ? { a: input } : { b: input },
+    party === 'alice' ? { player1: input } : { player2: input },
     (to, msg) => {
       assert(to === otherParty);
       socket.send(msg);
@@ -75,5 +80,17 @@ export default async function runProtocol(
 
   const output = Output.parse(await session.output());
 
-  return output.main ? '😍' : '🙂';
+  const outputMap: Record<number, 'win' | 'lose' | 'draw' | undefined> = {
+    0: 'draw',
+    1: party === 'alice' ? 'win' : 'lose',
+    2: party === 'alice' ? 'lose' : 'win',
+  };
+
+  const result = outputMap[output.main];
+
+  if (result === undefined) {
+    throw new Error('Invalid output');
+  }
+
+  return result;
 }

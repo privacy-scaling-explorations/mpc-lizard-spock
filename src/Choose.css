@@ -7,7 +7,7 @@
 
 .choice {
   text-align: center;
-  font-size: calc(0.4 * var(--aw));
+  font-size: calc(0.1 * var(--aw));
   border-radius: 100%;
   width: calc(0.5 * var(--aw));
   height: calc(0.5 * var(--aw));
@@ -15,6 +15,9 @@
   align-self: center;
   user-select: none;
   cursor: pointer;
+  display: flex;
+  place-items: center;
+  place-content: center;
 }
 
 .choice.selected.😍 {
@@ -23,10 +26,6 @@
 
 .choice.selected {
   border: 5px solid #7c46c4;
-}
-
-.choice div {
-  transform: translateY(calc(-0.04 * var(--aw)));
 }
 
 button.😍 {

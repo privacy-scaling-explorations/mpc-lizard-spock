@@ -21,14 +21,15 @@ type PageKind =
   | 'Result'
   | 'Error';
 
-export default class Ctx extends Emitter<{ ready(choice: '🙂' | '😍'): void }> {
+export type GameOption = 'rock' | 'paper' | 'scissors' | 'lizard' | 'spock';
+
+export default class Ctx extends Emitter<{ ready(choice: GameOption): void }> {
   page = new UsableField<PageKind>('Home');
   mode: 'Host' | 'Join' = 'Host';
   key = new UsableField(Key.random());
   socket = new UsableField<RtcPairSocket | undefined>(undefined);
-  choicesReversed = Math.random() < 0.5;
   friendReady = false;
-  result = new UsableField<'🙂' | '😍' | 'malicious' | undefined>(undefined);
+  result = new UsableField<'win' | 'lose' | 'draw' | undefined>(undefined);
   errorMsg = new UsableField<string>('');
 
   constructor() {
@@ -118,7 +119,7 @@ export default class Ctx extends Emitter<{ ready(choice: '🙂' | '😍'): void 
     );
 
     const [choice, _readyMsg] = await Promise.all([
-      new Promise<'🙂' | '😍'>(resolve => {
+      new Promise<GameOption>(resolve => {
         this.once('ready', resolve);
       }),
       channel.recv(MessageReady).then(msg => {
@@ -149,7 +150,7 @@ export default class Ctx extends Emitter<{ ready(choice: '🙂' | '😍'): void 
     this.page.set('Error');
   };
 
-  async send(choice: '🙂' | '😍') {
+  async send(choice: GameOption) {
     this.emit('ready', choice);
 
     if (!this.friendReady) {

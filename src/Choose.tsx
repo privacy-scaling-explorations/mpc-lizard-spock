@@ -1,30 +1,18 @@
 import { useState } from 'react';
 import './Choose.css';
-import Ctx from './Ctx';
-import never from './never';
+import Ctx, { GameOption } from './Ctx';
 
 export default function Choose() {
   const ctx = Ctx.use();
-  const [selection, setSelection] = useState<'🙂' | '😍' | undefined>();
-
-  const choices = {
-    friendship: <Choice selection={selection} setSelection={setSelection} type='🙂' />,
-    love: <Choice selection={selection} setSelection={setSelection} type='😍' />,
-  };
+  const [selection, setSelection] = useState<GameOption | undefined>();
 
   return (
     <div className='choose-page'>
-      {
-        ctx.choicesReversed
-          ? <>
-            {choices.love}
-            {choices.friendship}
-          </>
-          : <>
-            {choices.friendship}
-            {choices.love}
-          </>
-      }
+      <Choice selection={selection} setSelection={setSelection} type='rock' />
+      <Choice selection={selection} setSelection={setSelection} type='paper' />
+      <Choice selection={selection} setSelection={setSelection} type='scissors' />
+      <Choice selection={selection} setSelection={setSelection} type='lizard' />
+      <Choice selection={selection} setSelection={setSelection} type='spock' />
       <div>
         <button
           disabled={selection === undefined}
@@ -43,19 +31,18 @@ export default function Choose() {
   );
 }
 
-function buttonText(selection: '🙂' | '😍' | undefined) {
-  switch (selection) {
-  case '🙂': return 'Send Friendship 🙂';
-  case '😍': return 'Send Love 😍';
-  case undefined: return '(Choose then Confirm)';
-  default: never(selection);
+function buttonText(selection: GameOption | undefined) {
+  if (selection === undefined) {
+    return '(Choose then Confirm)';
   }
+
+  return `Send ${selection}`;
 }
 
 function Choice({ selection, setSelection, type }: {
-  selection: '🙂' | '😍' | undefined;
-  setSelection: (selection: '🙂' | '😍' | undefined) => void;
-  type: '🙂' | '😍';
+  selection: GameOption | undefined;
+  setSelection: (selection: GameOption | undefined) => void;
+  type: GameOption;
 }) {
   return (
     <div
