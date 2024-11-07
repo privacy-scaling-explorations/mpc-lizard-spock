@@ -13,7 +13,7 @@ export default function Choose() {
       <Choice selection={selection} setSelection={setSelection} type='scissors' />
       <Choice selection={selection} setSelection={setSelection} type='lizard' />
       <Choice selection={selection} setSelection={setSelection} type='spock' />
-      <div>
+      <div style={{ marginBottom: '3em' }}>
         <button
           disabled={selection === undefined}
           style={{ width: '100%', lineHeight: '1.1em' }}
@@ -36,7 +36,7 @@ function buttonText(selection: GameOption | undefined) {
     return '(Choose then Confirm)';
   }
 
-  return `Send ${selection}`;
+  return `Send ${capitalize(selection)}`;
 }
 
 function Choice({ selection, setSelection, type }: {
@@ -48,6 +48,10 @@ function Choice({ selection, setSelection, type }: {
     <div
       className={`choice ${selection === type && 'selected'} ${type}`}
       onClick={() => setSelection(selection === type ? undefined : type)}
-    ><div>{type}</div></div>
+    ><div>{capitalize(type)}</div></div>
   );
+}
+
+function capitalize(s: string) {
+  return s[0].toUpperCase() + s.slice(1);
 }

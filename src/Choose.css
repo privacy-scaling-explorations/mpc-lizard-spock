@@ -18,14 +18,16 @@
   display: flex;
   place-items: center;
   place-content: center;
-}
-
-.choice.selected.😍 {
-  border: 5px solid #d73253;
+  border: 5px solid black;
+  color: black;
+  opacity: 0.7;
 }
 
 .choice.selected {
-  border: 5px solid #7c46c4;
+  background-color: white;
+  color: black;
+  border: 5px solid black;
+  opacity: 1;
 }
 
 button.😍 {
