@@ -31,7 +31,10 @@ export default function Home() {
       <h2>Cryptography</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.7em' }}>
         <div>
-          This app uses&nbsp;
+          This&nbsp;
+          <a href='https://github.com/voltrevo/mpc-lizard-spock'>
+            open source
+          </a> app uses&nbsp;
           <a href='https://github.com/voltrevo/mpc-framework'>
             secure MPC
           </a> to calculate the result while keeping your input secret.
