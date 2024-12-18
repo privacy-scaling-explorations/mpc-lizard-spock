@@ -50,6 +50,6 @@ function Choice({ selection, setSelection, type }: {
     <div
       className={`choice ${selection === type && 'selected'} ${type}`}
       onClick={() => setSelection(selection === type ? undefined : type)}
-    ><div>{getEmoji(type)}</div></div>
+    ><div style={{ fontSize: '2.2em' }}>{getEmoji(type)}</div></div>
   );
 }
