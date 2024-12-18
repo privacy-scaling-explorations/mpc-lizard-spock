@@ -1,5 +1,6 @@
 import capitalize from './capitalize';
 import Ctx from './Ctx';
+import getEmoji from './getEmoji';
 
 export default function Result() {
   const ctx = Ctx.use();
@@ -8,25 +9,25 @@ export default function Result() {
 
   const opponentMap = {
     win: {
-      rock: 'Scissors or Lizard',
-      paper: 'Rock or Spock',
-      scissors: 'Paper or Lizard',
-      lizard: 'Spock or Paper',
-      spock: 'Rock or Scissors',
+      rock: 'scissors, lizard',
+      paper: 'rock, spock',
+      scissors: 'paper, lizard',
+      lizard: 'spock, paper',
+      spock: 'rock, scissors',
     },
     lose: {
-      rock: 'Paper or Spock',
-      paper: 'Scissors or Lizard',
-      scissors: 'Rock or Spock',
-      lizard: 'Rock or Scissors',
-      spock: 'Paper or Lizard',
+      rock: 'paper, spock',
+      paper: 'scissors, lizard',
+      scissors: 'rock, spock',
+      lizard: 'rock, scissors',
+      spock: 'paper, lizard',
     },
     draw: {
-      rock: 'Rock',
-      paper: 'Paper',
-      scissors: 'Scissors',
-      lizard: 'Lizard',
-      spock: 'Spock',
+      rock: 'rock',
+      paper: 'paper',
+      scissors: 'scissors',
+      lizard: 'lizard',
+      spock: 'spock',
     },
   };
 
@@ -43,11 +44,11 @@ export default function Result() {
         <table>
           <tr>
             <td style={{ width: '10ch' }}>You:</td>
-            <td>{capitalize(choice ?? '')}</td>
+            <td>{getEmoji(choice ?? '')}</td>
           </tr>
           <tr>
             <td style={{ width: '10ch' }}>Opponent:</td>
-            <td>{opponentOptions}</td>
+            <td>{opponentOptions.split(', ').map(getEmoji).join(' or ')}</td>
           </tr>
         </table>
       </div>

@@ -1,1 +1,53 @@
-<svg width="500" height="500" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="5.5" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="black"></polygon></marker></defs><g><circle cx="250" cy="75" r="55" stroke="black" stroke-width="2.5" fill="white"></circle><text x="250" y="80.5" text-anchor="middle" font-size="22" font-family="Arial">Rock</text></g><g><circle cx="416.43489035165186" cy="195.92202598438422" r="55" stroke="black" stroke-width="2.5" fill="white"></circle><text x="416.43489035165186" y="201.42202598438422" text-anchor="middle" font-size="22" font-family="Arial">Paper</text></g><g><circle cx="352.8624191511828" cy="391.57797401561584" r="55" stroke="black" stroke-width="2.5" fill="white"></circle><text x="352.8624191511828" y="397.07797401561584" text-anchor="middle" font-size="22" font-family="Arial">Scissors</text></g><g><circle cx="147.1375808488172" cy="391.57797401561584" r="55" stroke="black" stroke-width="2.5" fill="white"></circle><text x="147.1375808488172" y="397.07797401561584" text-anchor="middle" font-size="22" font-family="Arial">Lizard</text></g><g><circle cx="83.56510964834811" cy="195.92202598438422" r="55" stroke="black" stroke-width="2.5" fill="white"></circle><text x="83.56510964834811" y="201.42202598438422" text-anchor="middle" font-size="22" font-family="Arial">Spock</text></g><line x1="266.9959346906221" y1="127.30810839623345" x2="332.7763145168112" y2="329.7593004564309" stroke="black" stroke-width="2.5" marker-end="url(#arrowhead)"></line><line x1="233.0040653093779" y1="127.30810839623345" x2="167.22368548318877" y2="329.7593004564309" stroke="black" stroke-width="2.5" marker-end="url(#arrowhead)"></line><line x1="371.93895566102975" y1="163.5938371082982" x2="302.58610463437157" y2="113.20604139901076" stroke="black" stroke-width="2.5" marker-end="url(#arrowhead)"></line><line x1="361.43489035165186" y1="195.92202598438422" x2="148.5651096483481" y2="195.92202598438422" stroke="black" stroke-width="2.5" marker-end="url(#arrowhead)"></line><line x1="369.8583538418049" y1="339.2698656193824" x2="396.3487857172803" y2="257.7406995435692" stroke="black" stroke-width="2.5" marker-end="url(#arrowhead)"></line><line x1="297.8624191511828" y1="391.57797401561584" x2="212.1375808488172" y2="391.57797401561584" stroke="black" stroke-width="2.5" marker-end="url(#arrowhead)"></line><line x1="130.1416461581951" y1="339.2698656193824" x2="103.6512142827197" y2="257.7406995435692" stroke="black" stroke-width="2.5" marker-end="url(#arrowhead)"></line><line x1="191.63351553943932" y1="359.2497851395298" x2="363.8487857172803" y2="234.12806738339498" stroke="black" stroke-width="2.5" marker-end="url(#arrowhead)"></line><line x1="128.06104433897022" y1="228.25021486047024" x2="300.2763145168112" y2="353.3719326166051" stroke="black" stroke-width="2.5" marker-end="url(#arrowhead)"></line><line x1="128.06104433897022" y1="163.5938371082982" x2="197.4138953656284" y2="113.20604139901076" stroke="black" stroke-width="2.5" marker-end="url(#arrowhead)"></line></svg>
+<svg width="500" height="500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="5.5" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="black"></polygon>
+    </marker>
+  </defs>
+  
+  <g>
+    <circle cx="250" cy="75" r="55" stroke="black" stroke-width="2.5" fill="white"></circle>
+    <text x="250" y="94.5" text-anchor="middle" font-size="55" font-family="Arial">🪨</text>
+  </g>
+  
+  <g>
+    <circle cx="416.4" cy="195.9" r="55" stroke="black" stroke-width="2.5" fill="white"></circle>
+    <text x="416.4" y="215.4" text-anchor="middle" font-size="55" font-family="Arial">📄</text>
+  </g>
+  
+  <g>
+    <circle cx="352.9" cy="391.6" r="55" stroke="black" stroke-width="2.5" fill="white"></circle>
+    <text x="352.9" y="411.1" text-anchor="middle" font-size="55" font-family="Arial">✂️</text>
+  </g>
+  
+  <g>
+    <circle cx="147.1" cy="391.6" r="55" stroke="black" stroke-width="2.5" fill="white"></circle>
+    <text x="147.1" y="411.1" text-anchor="middle" font-size="55" font-family="Arial">🦎</text>
+  </g>
+  
+  <g>
+    <circle cx="83.6" cy="195.9" r="55" stroke="black" stroke-width="2.5" fill="white"></circle>
+    <text x="83.6" y="215.4" text-anchor="middle" font-size="55" font-family="Arial">🖖</text>
+  </g>
+  
+  <line x1="267.0" y1="127.3" x2="332.8" y2="329.8" 
+        stroke="black" stroke-width="2.5" marker-end="url(#arrowhead)"></line>
+  <line x1="233.0" y1="127.3" x2="167.2" y2="329.8" 
+        stroke="black" stroke-width="2.5" marker-end="url(#arrowhead)"></line>
+  <line x1="371.9" y1="163.6" x2="302.6" y2="113.2" 
+        stroke="black" stroke-width="2.5" marker-end="url(#arrowhead)"></line>
+  <line x1="361.4" y1="195.9" x2="148.6" y2="195.9" 
+        stroke="black" stroke-width="2.5" marker-end="url(#arrowhead)"></line>
+  <line x1="369.9" y1="339.3" x2="396.3" y2="257.7" 
+        stroke="black" stroke-width="2.5" marker-end="url(#arrowhead)"></line>
+  <line x1="297.9" y1="391.6" x2="212.1" y2="391.6" 
+        stroke="black" stroke-width="2.5" marker-end="url(#arrowhead)"></line>
+  <line x1="130.1" y1="339.3" x2="103.7" y2="257.7" 
+        stroke="black" stroke-width="2.5" marker-end="url(#arrowhead)"></line>
+  <line x1="191.6" y1="359.2" x2="363.8" y2="234.1" 
+        stroke="black" stroke-width="2.5" marker-end="url(#arrowhead)"></line>
+  <line x1="128.1" y1="228.3" x2="300.3" y2="353.4" 
+        stroke="black" stroke-width="2.5" marker-end="url(#arrowhead)"></line>
+  <line x1="128.1" y1="163.6" x2="197.4" y2="113.2" 
+        stroke="black" stroke-width="2.5" marker-end="url(#arrowhead)"></line>
+</svg>
