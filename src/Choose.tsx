@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './Choose.css';
 import Ctx, { GameOption } from './Ctx';
 import capitalize from './capitalize';
+import getEmoji from './getEmoji';
 
 export default function Choose() {
   const ctx = Ctx.use();
@@ -49,6 +50,6 @@ function Choice({ selection, setSelection, type }: {
     <div
       className={`choice ${selection === type && 'selected'} ${type}`}
       onClick={() => setSelection(selection === type ? undefined : type)}
-    ><div>{capitalize(type)}</div></div>
+    ><div>{getEmoji(type)}</div></div>
   );
 }
