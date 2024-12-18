@@ -9,13 +9,24 @@ export default function Choose() {
   const [selection, setSelection] = useState<GameOption | undefined>();
 
   return (
-    <div className='choose-page'>
+    <div className='choose-page' style={{ WebkitTapHighlightColor: 'transparent' }}>
       <Choice selection={selection} setSelection={setSelection} type='rock' />
       <Choice selection={selection} setSelection={setSelection} type='paper' />
       <Choice selection={selection} setSelection={setSelection} type='scissors' />
       <Choice selection={selection} setSelection={setSelection} type='lizard' />
       <Choice selection={selection} setSelection={setSelection} type='spock' />
       <div style={{ marginBottom: '3em' }}>
+        {selection !== undefined && <>
+          <button
+            className='secondary'
+            onClick={() => setSelection(undefined)}
+            style={{
+              width: '100%',
+              lineHeight: '1.1em',
+              marginBottom: '1em',
+            }}
+          >Back to Selection</button>
+        </>}
         <button
           disabled={selection === undefined}
           style={{ width: '100%', lineHeight: '1.1em' }}
@@ -46,6 +57,10 @@ function Choice({ selection, setSelection, type }: {
   setSelection: (selection: GameOption | undefined) => void;
   type: GameOption;
 }) {
+  if (selection !== undefined && selection !== type) {
+    return <></>;
+  }
+
   return (
     <div
       className={`choice ${selection === type && 'selected'} ${type}`}

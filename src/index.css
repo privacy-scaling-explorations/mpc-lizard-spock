@@ -78,6 +78,10 @@ button {
   color: white;
 }
 
+button.secondary {
+  background-color: #9291be;
+}
+
 button:disabled {
   opacity: 0.5;
   cursor: default;
