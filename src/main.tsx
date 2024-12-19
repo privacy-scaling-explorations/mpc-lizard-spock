@@ -17,3 +17,13 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     </Ctx.Provider>
   </React.StrictMode>,
 );
+
+const setVh = () => {
+  document.documentElement.style.setProperty(
+    '--vh',
+    `${window.innerHeight}px`,
+  );
+};
+
+setVh();
+window.addEventListener('resize', setVh);

@@ -39,15 +39,15 @@ export default function Result() {
 
   return (
     <div className='result'>
-      <center style={{ fontSize: 'calc(0.4 * var(--aw))' }}>{capitalize(result ?? '')}</center>
-      <div style={{ display: 'flex', placeContent: 'center' }}>
+      <center style={{ fontSize: 'calc(0.3 * var(--aw))' }}>{capitalize(result ?? '')}</center>
+      <div style={{ display: 'flex', placeContent: 'center', fontSize: '2em' }}>
         <table>
           <tr>
-            <td style={{ width: '10ch' }}>You:</td>
+            <td style={{ width: '6ch' }}>You:</td>
             <td>{getEmoji(choice ?? '')}</td>
           </tr>
           <tr>
-            <td style={{ width: '10ch' }}>Opponent:</td>
+            <td style={{ width: '6ch' }}>Them:</td>
             <td>{opponentOptions.split(', ').map(getEmoji).join(' or ')}</td>
           </tr>
         </table>

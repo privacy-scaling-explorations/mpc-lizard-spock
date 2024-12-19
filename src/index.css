@@ -16,12 +16,14 @@ html {
 body {
   display: flex;
   font-size: 18px;
-  min-height: -webkit-fill-available;
+  height: var(--vh);
   overflow-x: hidden;
   overflow-y: auto;
 }
 
 :root {
+  --vh: 100vh;
+
   font-family: Helvetica;
   line-height: 1.5;
   font-weight: 400;
@@ -76,6 +78,10 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
   color: white;
+}
+
+button.secondary {
+  background-color: #9291be;
 }
 
 button:disabled {
