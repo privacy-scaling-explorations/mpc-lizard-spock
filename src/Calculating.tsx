@@ -6,6 +6,6 @@ export default function Calculating() {
   const mpcProgress = ctx.mpcProgress.use();
 
   return <div>
-    <ProgressBar progress={mpcProgress ** 2} />
+    <ProgressBar progress={mpcProgress} />
   </div>;
 }
