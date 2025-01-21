@@ -12,7 +12,7 @@ export default async function runProtocol(
   mode: 'Host' | 'Join',
   socket: RtcPairSocket,
   choice: GameOption,
-  onProgress?: (percentage: number) => void,
+  onProgress?: (progress: number) => void,
 ): Promise<'win' | 'lose' | 'draw'> {
   const msgQueue = new AsyncQueue<unknown>();
 
@@ -25,7 +25,7 @@ export default async function runProtocol(
     currentBytes += msg.byteLength;
 
     if (onProgress) {
-      onProgress(Math.floor(currentBytes / TOTAL_BYTES * 100));
+      onProgress(currentBytes / TOTAL_BYTES);
     }
   });
 
@@ -76,7 +76,7 @@ export default async function runProtocol(
       currentBytes += msg.byteLength;
 
       if (onProgress) {
-        onProgress(Math.floor(currentBytes / TOTAL_BYTES * 100));
+        onProgress(currentBytes / TOTAL_BYTES);
       }
     },
   );
