@@ -23,7 +23,7 @@ export default function Host() {
         <QRCodeCanvas
           style={{ width: '100%', height: 'auto' }}
           bgColor='transparent'
-          value={code}
+          value={`${window.location.origin}${window.location.pathname}#${code}`}
         />
       </center>
       <p>

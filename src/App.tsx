@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Calculating from './Calculating';
 import Choose from './Choose';
 import Ctx from './Ctx';
@@ -8,11 +9,22 @@ import Join from './Join';
 import Result from './Result';
 import Share from './Share';
 import Waiting from './Waiting';
+import isKey from './isKey';
 import never from './never';
 
 function App() {
   const ctx = Ctx.use();
   const page = ctx.page.use();
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const code = url.hash.slice(1);
+
+    if (isKey(code)) {
+      window.location.hash = '';
+      ctx.join(code);
+    }
+  }, [ctx]);
 
   let content;
 
