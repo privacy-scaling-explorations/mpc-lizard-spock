@@ -21,6 +21,7 @@ function App() {
     const code = url.hash.slice(1);
 
     if (isKey(code)) {
+      window.location.hash = '';
       ctx.join(code);
     }
   }, [ctx]);
