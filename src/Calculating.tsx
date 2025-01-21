@@ -9,13 +9,11 @@ export default function Calculating() {
   // The first 20% of progress is amplified to take significantly more time,
   // while the remaining 80% is compressed to progress faster.
   function getEasedProgress(progress: number) {
-    const t = Math.min(1, Math.max(0, progress));
-
-    if (t < 0.2) {
-      return t * 10;
+    if (progress < 0.2) {
+      return progress * 10;
     }
 
-    return (1 + (t - 0.2) * 0.1);
+    return (1 + (progress - 0.2) * 0.1);
   }
 
   return <div>
