@@ -31,6 +31,7 @@ export default class Ctx extends Emitter<{ ready(choice: GameOption): void }> {
   result = new UsableField<'win' | 'lose' | 'draw' | undefined>(undefined);
   errorMsg = new UsableField<string>('');
   choice = new UsableField<GameOption | undefined>(undefined);
+  mpcProgress = new UsableField<number>(0);
 
   constructor() {
     super();
@@ -135,6 +136,9 @@ export default class Ctx extends Emitter<{ ready(choice: GameOption): void }> {
       this.mode,
       socket,
       choice,
+      percentage => {
+        this.mpcProgress.set(percentage);
+      },
     );
 
     this.result.set(result);

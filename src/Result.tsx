@@ -42,14 +42,16 @@ export default function Result() {
       <center style={{ fontSize: 'calc(0.3 * var(--aw))' }}>{capitalize(result ?? '')}</center>
       <div style={{ display: 'flex', placeContent: 'center', fontSize: '2em' }}>
         <table>
-          <tr>
-            <td style={{ width: '6ch' }}>You:</td>
-            <td>{getEmoji(choice ?? '')}</td>
-          </tr>
-          <tr>
-            <td style={{ width: '6ch' }}>Them:</td>
-            <td>{opponentOptions.split(', ').map(getEmoji).join(' or ')}</td>
-          </tr>
+          <tbody>
+            <tr>
+              <td style={{ width: '6ch' }}>You:</td>
+              <td>{getEmoji(choice ?? '')}</td>
+            </tr>
+            <tr>
+              <td style={{ width: '6ch' }}>Them:</td>
+              <td>{opponentOptions.split(', ').map(getEmoji).join(' or ')}</td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
