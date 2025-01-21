@@ -8,5 +8,5 @@
 .progress-bar > div {
   height: 20px;
   background-color: #5DA79A;
-  transition: width 0.5s ease-in-out;
+  transition: width 100ms;
 }
