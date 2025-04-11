@@ -16,7 +16,7 @@ export default async function runProtocol(
 ): Promise<'win' | 'lose' | 'draw'> {
   const msgQueue = new AsyncQueue<unknown>();
 
-  const TOTAL_BYTES = 285618;
+  const TOTAL_BYTES = 273900;
   let currentBytes = 0;
 
   socket.on('message', (msg: Uint8Array) => {
@@ -32,7 +32,7 @@ export default async function runProtocol(
   await summon.init();
 
   const circuitFiles = await getCircuitFiles();
-  const circuit = summon.compileBoolean('circuit/main.ts', 3, circuitFiles);
+  const { circuit } = summon.compileBoolean('circuit/main.ts', 3, circuitFiles);
 
   const mpcSettings = [
     {
@@ -95,6 +95,16 @@ export default async function runProtocol(
   });
 
   const output = Output.parse(await session.output());
+
+  if (currentBytes !== TOTAL_BYTES) {
+    console.error(
+      [
+        'Bytes sent & received was not equal to TOTAL_BYTES.',
+        ' This causes incorrect progress calculations.',
+        ` To fix, updated TOTAL_BYTES to ${currentBytes}.`,
+      ].join(''),
+    );
+  }
 
   const outputMap: Record<number, 'win' | 'lose' | 'draw' | undefined> = {
     0: 'draw',
