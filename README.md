@@ -2,7 +2,7 @@
 
 Rock Paper Scissors Lizard Spock using MPC.
 
-https://voltrevo.github.io/mpc-lizard-spock
+Try it: https://mpc.pse.dev/apps/lizard-spock
 
-Built using [MPC framework](https://github.com/voltrevo/mpc-framework) using a
-[secure 2PC backend](https://github.com/voltrevo/emp-wasm-backend).
+Built using [MPC framework](https://github.com/privacy-scaling-explorations/mpc-framework) using a
+[secure 2PC backend](https://github.com/privacy-scaling-explorations/emp-wasm-backend).
