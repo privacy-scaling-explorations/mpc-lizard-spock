@@ -16,7 +16,7 @@
     "base64url": "^3.0.1",
     "bs58": "^5.0.0",
     "buffer": "^6.0.3",
-    "emp-wasm-engine": "^0.5.1",
+    "emp-wasm-engine": "^0.5.2",
     "events": "^3.3.0",
     "keccak256": "^1.0.6",
     "mpc-framework": "^0.3.0",
