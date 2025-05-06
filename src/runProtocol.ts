@@ -1,6 +1,6 @@
 import z from 'zod';
 import * as mpcf from 'mpc-framework';
-import { EmpWasmBackend } from 'emp-wasm-backend';
+import { EmpWasmEngine } from 'emp-wasm-engine';
 import * as summon from 'summon-ts';
 import { RtcPairSocket } from 'rtc-pair-socket';
 import assert from './assert';
@@ -16,7 +16,7 @@ export default async function runProtocol(
 ): Promise<'win' | 'lose' | 'draw'> {
   const msgQueue = new AsyncQueue<unknown>();
 
-  const TOTAL_BYTES = 273900;
+  const TOTAL_BYTES = 265148;
   let currentBytes = 0;
 
   socket.on('message', (msg: Uint8Array) => {
@@ -31,30 +31,16 @@ export default async function runProtocol(
 
   await summon.init();
 
-  const circuitFiles = await getCircuitFiles();
-  const { circuit } = summon.compileBoolean('circuit/main.ts', 3, circuitFiles);
+  const { circuit } = summon.compile({
+    path: 'circuit/main.ts',
+    boolifyWidth: 3,
+    files: await getCircuitFiles(),
+  });
 
-  const mpcSettings = [
-    {
-      name: 'alice',
-      inputs: ['player1'],
-      outputs: ['main'],
-    },
-    {
-      name: 'bob',
-      inputs: ['player2'],
-      outputs: ['main'],
-    },
-  ];
+  const protocol = new mpcf.Protocol(circuit, new EmpWasmEngine());
 
-  const protocol = new mpcf.Protocol(
-    circuit,
-    mpcSettings,
-    new EmpWasmBackend(),
-  );
-
-  const party = mode === 'Host' ? 'alice' : 'bob';
-  const otherParty = mode === 'Host' ? 'bob' : 'alice';
+  const party = mode === 'Host' ? 'player1' : 'player2';
+  const otherParty = mode === 'Host' ? 'player2' : 'player1';
 
   const optionMap: Record<GameOption, number> = {
     rock: 1,
@@ -68,7 +54,7 @@ export default async function runProtocol(
 
   const session = protocol.join(
     party,
-    party === 'alice' ? { player1: input } : { player2: input },
+    { [party]: input },
     (to, msg) => {
       assert(to === otherParty);
       socket.send(msg);
@@ -91,7 +77,7 @@ export default async function runProtocol(
   });
 
   const Output = z.object({
-    main: z.number(),
+    result: z.number(),
   });
 
   const output = Output.parse(await session.output());
@@ -108,11 +94,11 @@ export default async function runProtocol(
 
   const outputMap: Record<number, 'win' | 'lose' | 'draw' | undefined> = {
     0: 'draw',
-    1: party === 'alice' ? 'win' : 'lose',
-    2: party === 'alice' ? 'lose' : 'win',
+    1: party === 'player1' ? 'win' : 'lose',
+    2: party === 'player1' ? 'lose' : 'win',
   };
 
-  const result = outputMap[output.main];
+  const result = outputMap[output.result];
 
   if (result === undefined) {
     throw new Error('Invalid output');
