@@ -26,6 +26,7 @@ const rtcConfig = (() => {
   const envVar = import.meta.env.VITE_RTC_CONFIGURATION;
 
   if (!envVar) {
+    console.error('No RTC configuration found');
     return undefined;
   }
 
