@@ -1,6 +1,7 @@
 import capitalize from './capitalize';
 import Ctx from './Ctx';
 import getEmoji from './getEmoji';
+import { useState } from 'react';
 
 export default function Result() {
   const ctx = Ctx.use();
@@ -37,6 +38,18 @@ export default function Result() {
     opponentOptions = opponentMap[result][choice];
   }
 
+  const [loading, setLoading] = useState(false);
+
+  const handlePlayAgain = async () => {
+    setLoading(true);
+    try {
+      await ctx.playAgain();
+    } catch (error) {
+      console.error('Error playing again:', error);
+      setLoading(false);
+    }
+  };
+
   return (
     <div className='result'>
       <center style={{ fontSize: 'calc(0.3 * var(--aw))' }}>{capitalize(result ?? '')}</center>
@@ -53,6 +66,22 @@ export default function Result() {
             </tr>
           </tbody>
         </table>
+      </div>
+      <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center' }}>
+        <button
+          className='button-primary'
+          onClick={handlePlayAgain}
+          disabled={loading}
+          style={{
+            padding: '0.75rem 1.5rem',
+            fontSize: '1.1rem',
+            borderRadius: '8px',
+            cursor: loading ? 'wait' : 'pointer',
+            opacity: loading ? 0.7 : 1,
+          }}
+        >
+          {loading ? 'Setting up new game...' : 'Play Again'}
+        </button>
       </div>
     </div>
   );

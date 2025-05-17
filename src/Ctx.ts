@@ -67,9 +67,28 @@ export default class Ctx extends Emitter<{ ready(choice: GameOption): void }> {
 
     this.socket.set(socket);
 
-    // eslint-disable-next-line no-return-await
-    return await new Promise(resolve => {
-      socket.on('open', () => resolve(socket));
+    return new Promise<RtcPairSocket>((resolve, reject) => {
+      // Set a timeout to prevent getting stuck in connecting state
+      const connectionTimeout = setTimeout(() => {
+        console.error('WebRTC connection timeout');
+        socket.close();
+        reject(new Error('Connection timeout. Please try again.'));
+      }, 15000); // 15 seconds timeout
+
+      socket.on('open', () => {
+        clearTimeout(connectionTimeout);
+        resolve(socket);
+      });
+
+      socket.on('error', err => {
+        clearTimeout(connectionTimeout);
+        console.error('WebRTC connection error:', err);
+        reject(err);
+      });
+    }).catch(error => {
+      this.errorMsg.set(`Connection error: ${error instanceof Error ? error.message : String(error)}`);
+      this.page.set('Error');
+      throw error;
     });
   }
 
@@ -155,7 +174,8 @@ export default class Ctx extends Emitter<{ ready(choice: GameOption): void }> {
 
     this.result.set(result);
 
-    socket.close();
+    // Don't close the socket, keep it open for potential replay
+    // socket.close();
 
     this.page.set('Result');
   }
@@ -178,6 +198,36 @@ export default class Ctx extends Emitter<{ ready(choice: GameOption): void }> {
       from: this.mode === 'Host' ? 'host' : 'joiner',
       type: 'ready',
     });
+  }
+
+  async playAgain() {
+    // Reset game state
+    this.friendReady = false;
+    this.result.set(undefined);
+    this.choice.set(undefined);
+    this.mpcProgress.set(0);
+
+    // Check if socket exists and try to use it
+    // Determine if we have a valid socket to use
+    const useExistingSocket = Boolean(this.socket.value);
+
+    if (useExistingSocket) {
+      try {
+        // Attempt to restart the protocol with existing socket
+        this.runProtocol(this.socket.value!).catch(this.handleProtocolError);
+        return; // Early return to avoid the reconnection code
+      } catch (error) {
+        // Socket exists but unusable, continue to reconnection
+        console.log('Error reusing socket, will reconnect:', error);
+      }
+    }
+
+    // Socket doesn't exist or is unusable, reconnect based on mode
+    if (this.mode === 'Host') {
+      this.host();
+    } else {
+      this.join(this.key.value.base58());
+    }
   }
 
   private static context = createContext<Ctx>(
