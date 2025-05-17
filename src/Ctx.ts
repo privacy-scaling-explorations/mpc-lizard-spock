@@ -230,6 +230,29 @@ export default class Ctx extends Emitter<{ ready(choice: GameOption): void }> {
     }
   }
 
+  endGame() {
+    // Close the socket if it exists
+    if (this.socket.value) {
+      this.socket.value.close();
+      this.socket.set(undefined);
+    }
+
+    // Reset game state
+    this.friendReady = false;
+    this.result.set(undefined);
+    this.choice.set(undefined);
+    this.mpcProgress.set(0);
+
+    // Generate a new key to avoid stale connection issues
+    this.key.set(Key.random());
+
+    // Reset to default mode
+    this.mode = 'Host';
+
+    // Go back to home page
+    this.page.set('Home');
+  }
+
   private static context = createContext<Ctx>(
     {} as Ctx,
   );
