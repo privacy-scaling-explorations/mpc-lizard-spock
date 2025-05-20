@@ -3,14 +3,14 @@ import Ctx from './Ctx';
 
 export default function Waiting() {
   const ctx = Ctx.use();
-  const [timeLeft, setTimeLeft] = useState(90); // 90 second timeout
+  const [timeLeft, setTimeLeft] = useState(180); // 180 second timeout
   const [message, setMessage] = useState('Waiting for other player...');
 
   useEffect(() => {
     // Check if socket exists
     if (!ctx.socket.value) {
       setMessage('Connection lost. The other player may have left the game.');
-      setTimeout(() => ctx.endGame(), 9000); // Return to home after 3 seconds
+      setTimeout(() => ctx.endGame(), 18000); // Return to home after 3 seconds
       return;
     }
 
@@ -22,7 +22,7 @@ export default function Waiting() {
           setMessage('The other player is not responding. Returning to home...');
 
           // Return to home after showing message
-          setTimeout(() => ctx.endGame(), 9000);
+          setTimeout(() => ctx.endGame(), 18000);
           return 0;
         }
         // eslint-disable-next-line padding-line-between-statements
@@ -35,7 +35,7 @@ export default function Waiting() {
     const handleConnectionLost = () => {
       clearInterval(timer);
       setMessage('Connection closed. The other player has left the game.');
-      setTimeout(() => ctx.endGame(), 9000); // Return to home after showing message
+      setTimeout(() => ctx.endGame(), 18000); // Return to home after showing message
     };
 
     // Add event listener for connection close
