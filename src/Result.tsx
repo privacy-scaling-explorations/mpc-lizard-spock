@@ -74,36 +74,18 @@ export default function Result() {
         gap: '1rem',
       }}>
         <button
-          className='button-primary'
-          onClick={handlePlayAgain}
-          disabled={loading}
-          style={{
-            padding: '0.75rem 1.5rem',
-            fontSize: '1.1rem',
-            borderRadius: '8px',
-            cursor: loading ? 'wait' : 'pointer',
-            opacity: loading ? 0.7 : 1,
-            backgroundColor: '#4CAF50', // Green color for play again
-          }}
-        >
-          {loading ? 'Setting up new game...' : 'Play Again'}
-        </button>
-
-        <button
-          className='button-secondary'
+          className='secondary'
           onClick={() => ctx.endGame()}
           disabled={loading}
-          style={{
-            padding: '0.75rem 1.5rem',
-            fontSize: '1.1rem',
-            borderRadius: '8px',
-            cursor: loading ? 'not-allowed' : 'pointer',
-            opacity: loading ? 0.5 : 1,
-            backgroundColor: '#f44336', // Red color for end game
-            color: 'white',
-          }}
         >
           End Game
+        </button>
+        <button
+          className='primary'
+          onClick={handlePlayAgain}
+          disabled={loading}
+        >
+          {loading ? 'Setting up new game...' : 'Play Again'}
         </button>
       </div>
     </div>

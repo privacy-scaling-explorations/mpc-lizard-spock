@@ -26,7 +26,7 @@ const rtcConfig = (() => {
   const envVar = import.meta.env.VITE_RTC_CONFIGURATION;
 
   if (!envVar) {
-    console.error('No RTC configuration found');
+    console.log(`Using ${envVar ? 'custom' : 'default'} RTC config`);
     return undefined;
   }
 
@@ -68,26 +68,41 @@ export default class Ctx extends Emitter<{ ready(choice: GameOption): void }> {
     this.socket.set(socket);
 
     return new Promise<RtcPairSocket>((resolve, reject) => {
-      // Set a timeout to prevent getting stuck in connecting state
-      const connectionTimeout = setTimeout(() => {
-        console.error('WebRTC connection timeout');
-        socket.close();
-        reject(new Error('Connection timeout. Please try again.'));
-      }, 15000); // 15 seconds timeout
+      // Only set a timeout if in Join mode
+      let connectionTimeout: ReturnType<typeof setTimeout> | undefined;
+
+      if (this.mode === 'Join') {
+        // Set a timeout to prevent getting stuck in connecting state
+        connectionTimeout = setTimeout(() => {
+          console.error('WebRTC connection timeout');
+          socket.close();
+          reject(new Error('Connection timeout. Please try again.'));
+        }, 15000); // 15 seconds timeout
+      }
 
       socket.on('open', () => {
-        clearTimeout(connectionTimeout);
+        if (connectionTimeout) {
+          clearTimeout(connectionTimeout);
+        }
+
         resolve(socket);
       });
 
       socket.on('error', err => {
-        clearTimeout(connectionTimeout);
+        if (connectionTimeout) {
+          clearTimeout(connectionTimeout);
+        }
+
         console.error('WebRTC connection error:', err);
         reject(err);
       });
     }).catch(error => {
-      this.errorMsg.set(`Connection error: ${error instanceof Error ? error.message : String(error)}`);
-      this.page.set('Error');
+      // Only handle error with UI updates if in Join mode
+      if (this.mode === 'Join') {
+        this.errorMsg.set(`Connection error: ${error instanceof Error ? error.message : String(error)}`);
+        this.page.set('Error');
+      }
+
       throw error;
     });
   }
