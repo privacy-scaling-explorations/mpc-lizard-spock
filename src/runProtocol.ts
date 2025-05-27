@@ -67,7 +67,7 @@ export default async function runProtocol(
     },
   );
 
-  msgQueue.stream(msg => {
+  const streamHandle = msgQueue.stream(msg => {
     if (!(msg instanceof Uint8Array)) {
       console.error(new Error('Expected Uint8Array'));
       return;
@@ -81,6 +81,8 @@ export default async function runProtocol(
   });
 
   const output = Output.parse(await session.output());
+
+  streamHandle.stop();
 
   if (currentBytes !== TOTAL_BYTES) {
     console.error(

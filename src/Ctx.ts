@@ -38,6 +38,7 @@ export default class Ctx extends Emitter<{ ready(choice: GameOption): void }> {
   mode: 'Host' | 'Join' = 'Host';
   key = new UsableField(Key.random());
   socket = new UsableField<RtcPairSocket | undefined>(undefined);
+  msgQueue = new AsyncQueue<unknown>();
   friendReady = false;
   result = new UsableField<'win' | 'lose' | 'draw' | undefined>(undefined);
   errorMsg = new UsableField<string>('');
@@ -146,23 +147,22 @@ export default class Ctx extends Emitter<{ ready(choice: GameOption): void }> {
   async runProtocol(socket: RtcPairSocket) {
     this.page.set('Choose');
 
-    const msgQueue = new AsyncQueue<unknown>();
-
     const FriendMsg = z.object({
       from: z.literal(this.mode === 'Host' ? 'joiner' : 'host'),
     });
 
     const msgListener = (msg: unknown) => {
       if (!FriendMsg.safeParse(msg).error) {
-        msgQueue.push(msg);
+        this.msgQueue.push(msg);
       }
     };
 
+    socket.removeAllListeners('message');
     socket.on('message', msgListener);
 
     const channel = makeZodChannel(
       (msg: unknown) => socket.send(msg),
-      () => msgQueue.shift(),
+      () => this.msgQueue.shift(),
     );
 
     const [choice, _readyMsg] = await Promise.all([
@@ -188,6 +188,10 @@ export default class Ctx extends Emitter<{ ready(choice: GameOption): void }> {
     );
 
     this.result.set(result);
+
+    // This allows us to capture the ready event for the next game if the next
+    // player sets up a new game while we're on the result page.
+    socket.on('message', msgListener);
 
     // Don't close the socket, keep it open for potential replay
     // socket.close();
@@ -246,26 +250,7 @@ export default class Ctx extends Emitter<{ ready(choice: GameOption): void }> {
   }
 
   endGame() {
-    // Close the socket if it exists
-    if (this.socket.value) {
-      this.socket.value.close();
-      this.socket.set(undefined);
-    }
-
-    // Reset game state
-    this.friendReady = false;
-    this.result.set(undefined);
-    this.choice.set(undefined);
-    this.mpcProgress.set(0);
-
-    // Generate a new key to avoid stale connection issues
-    this.key.set(Key.random());
-
-    // Reset to default mode
-    this.mode = 'Host';
-
-    // Go back to home page
-    this.page.set('Home');
+    window.location.reload();
   }
 
   private static context = createContext<Ctx>(
