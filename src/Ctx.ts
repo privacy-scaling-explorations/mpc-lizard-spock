@@ -38,6 +38,7 @@ export default class Ctx extends Emitter<{ ready(choice: GameOption): void }> {
   mode: 'Host' | 'Join' = 'Host';
   key = new UsableField(Key.random());
   socket = new UsableField<RtcPairSocket | undefined>(undefined);
+  msgQueue = new AsyncQueue<unknown>();
   friendReady = false;
   result = new UsableField<'win' | 'lose' | 'draw' | undefined>(undefined);
   errorMsg = new UsableField<string>('');
@@ -146,23 +147,22 @@ export default class Ctx extends Emitter<{ ready(choice: GameOption): void }> {
   async runProtocol(socket: RtcPairSocket) {
     this.page.set('Choose');
 
-    const msgQueue = new AsyncQueue<unknown>();
-
     const FriendMsg = z.object({
       from: z.literal(this.mode === 'Host' ? 'joiner' : 'host'),
     });
 
     const msgListener = (msg: unknown) => {
       if (!FriendMsg.safeParse(msg).error) {
-        msgQueue.push(msg);
+        this.msgQueue.push(msg);
       }
     };
 
+    socket.removeAllListeners('message');
     socket.on('message', msgListener);
 
     const channel = makeZodChannel(
       (msg: unknown) => socket.send(msg),
-      () => msgQueue.shift(),
+      () => this.msgQueue.shift(),
     );
 
     const [choice, _readyMsg] = await Promise.all([
@@ -188,6 +188,10 @@ export default class Ctx extends Emitter<{ ready(choice: GameOption): void }> {
     );
 
     this.result.set(result);
+
+    // This allows us to capture the ready event for the next game if the next
+    // player sets up a new game while we're on the result page.
+    socket.on('message', msgListener);
 
     // Don't close the socket, keep it open for potential replay
     // socket.close();
