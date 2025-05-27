@@ -26,6 +26,7 @@ const rtcConfig = (() => {
   const envVar = import.meta.env.VITE_RTC_CONFIGURATION;
 
   if (!envVar) {
+    console.log(`Using ${envVar ? 'custom' : 'default'} RTC config`);
     return undefined;
   }
 
@@ -66,9 +67,43 @@ export default class Ctx extends Emitter<{ ready(choice: GameOption): void }> {
 
     this.socket.set(socket);
 
-    // eslint-disable-next-line no-return-await
-    return await new Promise(resolve => {
-      socket.on('open', () => resolve(socket));
+    return new Promise<RtcPairSocket>((resolve, reject) => {
+      // Only set a timeout if in Join mode
+      let connectionTimeout: ReturnType<typeof setTimeout> | undefined;
+
+      if (this.mode === 'Join') {
+        // Set a timeout to prevent getting stuck in connecting state
+        connectionTimeout = setTimeout(() => {
+          console.error('WebRTC connection timeout');
+          socket.close();
+          reject(new Error('Connection timeout. Please try again.'));
+        }, 15000); // 15 seconds timeout
+      }
+
+      socket.on('open', () => {
+        if (connectionTimeout) {
+          clearTimeout(connectionTimeout);
+        }
+
+        resolve(socket);
+      });
+
+      socket.on('error', err => {
+        if (connectionTimeout) {
+          clearTimeout(connectionTimeout);
+        }
+
+        console.error('WebRTC connection error:', err);
+        reject(err);
+      });
+    }).catch(error => {
+      // Only handle error with UI updates if in Join mode
+      if (this.mode === 'Join') {
+        this.errorMsg.set(`Connection error: ${error instanceof Error ? error.message : String(error)}`);
+        this.page.set('Error');
+      }
+
+      throw error;
     });
   }
 
@@ -154,7 +189,8 @@ export default class Ctx extends Emitter<{ ready(choice: GameOption): void }> {
 
     this.result.set(result);
 
-    socket.close();
+    // Don't close the socket, keep it open for potential replay
+    // socket.close();
 
     this.page.set('Result');
   }
@@ -177,6 +213,59 @@ export default class Ctx extends Emitter<{ ready(choice: GameOption): void }> {
       from: this.mode === 'Host' ? 'host' : 'joiner',
       type: 'ready',
     });
+  }
+
+  async playAgain() {
+    // Reset game state
+    this.friendReady = false;
+    this.result.set(undefined);
+    this.choice.set(undefined);
+    this.mpcProgress.set(0);
+
+    // Check if socket exists and try to use it
+    // Determine if we have a valid socket to use
+    const useExistingSocket = Boolean(this.socket.value);
+
+    if (useExistingSocket) {
+      try {
+        // Attempt to restart the protocol with existing socket
+        this.runProtocol(this.socket.value!).catch(this.handleProtocolError);
+        return; // Early return to avoid the reconnection code
+      } catch (error) {
+        // Socket exists but unusable, continue to reconnection
+        console.log('Error reusing socket, will reconnect:', error);
+      }
+    }
+
+    // Socket doesn't exist or is unusable, reconnect based on mode
+    if (this.mode === 'Host') {
+      this.host();
+    } else {
+      this.join(this.key.value.base58());
+    }
+  }
+
+  endGame() {
+    // Close the socket if it exists
+    if (this.socket.value) {
+      this.socket.value.close();
+      this.socket.set(undefined);
+    }
+
+    // Reset game state
+    this.friendReady = false;
+    this.result.set(undefined);
+    this.choice.set(undefined);
+    this.mpcProgress.set(0);
+
+    // Generate a new key to avoid stale connection issues
+    this.key.set(Key.random());
+
+    // Reset to default mode
+    this.mode = 'Host';
+
+    // Go back to home page
+    this.page.set('Home');
   }
 
   private static context = createContext<Ctx>(
